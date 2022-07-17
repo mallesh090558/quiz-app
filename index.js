@@ -51,7 +51,7 @@ let questions = [
        "b":"TypeError",
        "c":"[\"f\", \"o\", \"o\"]",
        "d":"[][][\"f\", \"o\", \"o\"]",
-       "answer":"xxx"
+       "answer":"b"
     },
     {
        "id":7,
@@ -78,7 +78,7 @@ let questions = [
        "b":"false",
        "c":"TypeError",
        "d":"NaN",
-       "answer":"xxx"
+       "answer":"b"
     },
     {
        "id":10,
@@ -118,36 +118,30 @@ let questions = [
     }
  ];
 
-
  const question= document.getElementById('question');
- const answer=Array.from(document.getElementsByClassName("answer-text"));
+ const answer=new Array(document.getElementsByClassName("answer-text"));
  const questionCounterText=document.getElementById("counter");
  const scoreText=document.getElementById("score");
 
  let questioncounter;
  let score;
- const maxQuestions=5;
+ const maxQuestions=11;
 
  startgame = () => {
     questioncounter=0;
     score=0;
     availableQuestions=getrandomquestion(questions,maxQuestions);
-    console.log(availableQuestions);
+    //console.log(availableQuestions);
     getnewquestion();
  };
-
 
  const getrandomquestion = (arr,n) => {
     let len=arr.length;
     if(n>len){
-throw new RangeError("Out of Stock!!!");
+         throw new RangeError("Out of Stock!!!");
     }
-
-
-const shuffled = [...arr].sort(()=> 0.5 - Math.random());
-
-return (selected = shuffled.slice(0,n));
-
+   const shuffled = [...arr].sort(()=> 0.5 - Math.random());
+   return (selected = shuffled.slice(0,n));
  };
 
 const getnewquestion = () => {
@@ -156,21 +150,28 @@ const getnewquestion = () => {
         alert("Game over!!!");
         return;
     }
-
-
     questioncounter++;
     questionCounterText.innerText = `${questioncounter}/${maxQuestions}`;
 
     currentquestion=availableQuestions[0];
-    console.log(currentquestion);
+    //console.log(currentquestion);
 
     question.innerText= currentquestion.question;
-    console.log(answer);
-    // answer-text.innerText= currentquestion.answer;
-
-    // availableQuestions.shift();
-    // getnewquestion();
+    answer[0][0].innerText = currentquestion.a;
+    answer[0][1].innerText = currentquestion.b;
+    answer[0][2].innerText = currentquestion.c;
+    answer[0][3].innerText = currentquestion.d;
+    console.log(document.getElementsByClassName("answer-text")[0]);
+    
+   for(let i=0;i<4;i++) {
+      answer[0][i].addEventListener('click', function(event){
+         console.log("clicked answer")
+         if(event.currentTarget.attributes[1].value == currentquestion.answer)
+            scoreText.innerText++;
+         if(availableQuestions.shift()!=undefined)
+            getnewquestion();
+      });
+   }
 }
-
 
 startgame();
